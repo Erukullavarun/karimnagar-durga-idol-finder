@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karimnagar Durga Idol Finder - Find • Visit • Celebrate</title>
+  <meta name="description" content="Discover Durga Mata pandals, Navratri mandapams, and Bathukamma celebrations across Karimnagar, Telangana. Interactive live GPS map, photo gallery, and directions." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            saffron: {
+              50: '#fdf4f2',
+              100: '#fae5e0',
+              200: '#f4cdc4',
+              300: '#eaab9d',
+              400: '#d75d4f',
+              500: '#b8232e', // Royal Durga Sindoor
+              600: '#961621', // Deep Ruby Maroon
+              700: '#770e17', // Sacred Temple Maroon
+              800: '#5a0a11',
+              900: '#3f060b',
+            },
+            crimson: {
+              50: '#fdf2f4',
+              100: '#fbe4e8',
+              200: '#f7cbd2',
+              300: '#f0a3af',
+              400: '#e46b7f',
+              500: '#c51d34',
+              600: '#9e1025',
+              700: '#7e0c1c',
+              800: '#620a16',
+              900: '#46060f',
+            },
+            gold: {
+              50: '#fffef0',
+              100: '#fefbd8',
+              200: '#fef5b0',
+              300: '#fdec7d',
+              400: '#eac840',
+              500: '#d4af37', // Imperial Temple Gold
+              600: '#b38c22',
+              700: '#8c6b16',
+              800: '#664c0f',
+              900: '#433107',
+            },
+            cream: {
+              50: '#fcfaf7',
+              100: '#f7f3ec',
+              200: '#ede5d8',
+              300: '#dfd2be',
+              400: '#cbb89e',
+            },
+            ink: {
+              500: '#8a787c',
+              600: '#655257',
+              700: '#443539',
+              800: '#281d20',
+              900: '#140b0d', // Royal Deep Obsidian
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Leaflet Maps CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" />
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-cream-50 text-ink-900 flex flex-col min-h-screen">
+
+  <!-- MAIN SITE VIEW -->
+  <div id="main-site-view" class="flex-1 flex flex-col">
+    
+    <!-- Top Sacred Bar -->
+    <div class="bg-gradient-to-r from-crimson-700 via-saffron-600 to-amber-600 py-1.5 px-4 text-center text-xs font-semibold text-white tracking-wider flex items-center justify-between">
+      <span class="hidden sm:inline-block">🔱 ॥ ఓం శ్రీ దుర్గాయై నమః ॥</span>
+      <span class="mx-auto font-medium">శ్రీ కరీంనగర్ దుర్గా నవరాత్రి ఉత్సవాలు • Live Mandapam Directory & GPS Darshan</span>
+      <span class="hidden sm:inline-block">॥ జై దుర్గా భవానీ ॥ 🔱</span>
+    </div>
+
+    <!-- Sticky Header / Navbar -->
+    <header class="sticky top-0 z-[1000] bg-white/95 backdrop-blur-md border-b border-cream-300 shadow-soft">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+        
+        <!-- Logo -->
+        <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex items-center gap-3 group">
+          <img src="assets/images/logo.jpg" alt="Karimnagar Durga Idol Finder Logo" class="w-12 h-12 rounded-full object-cover shadow-soft ring-2 ring-saffron-500/40 group-hover:scale-105 transition-transform" />
+          <div>
+            <span class="font-display font-black text-lg sm:text-xl text-ink-900 tracking-tight block leading-none site-logo-text">Karimnagar Durga</span>
+            <span class="text-[10px] uppercase font-bold tracking-widest text-saffron-600 block mt-0.5">Idol Finder • Navratri</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-7 text-sm font-medium">
+          <a href="index.html" class="text-saffron-600 font-bold border-b-2 border-saffron-500 pb-1">Home</a>
+          <a href="map.html" class="text-ink-700 hover:text-saffron-600 transition-colors">Explore Map</a>
+          <a href="unique.html" class="text-ink-700 hover:text-saffron-600 transition-colors">Unique Durga</a>
+          <a href="gallery.html" class="text-ink-700 hover:text-saffron-600 transition-colors">Gallery</a>
+          <a href="about.html" class="text-ink-700 hover:text-saffron-600 transition-colors">About & FAQ</a>
+        </nav>
+
+        <!-- Right Action Button -->
+        <div class="flex items-center gap-3">
+          <a href="submit.html" class="btn-primary text-xs sm:text-sm !py-2.5 !px-5 flex items-center gap-1.5 shadow-md">
+            <span>🔱</span>
+            <span>+ Add Durga</span>
+          </a>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1">
+
+      <!-- HERO SECTION -->
+      <section id="hero-section" class="relative overflow-hidden bg-cream-200 pt-10 pb-24 sm:pt-16 sm:pb-28 lg:pt-16 lg:pb-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          
+          <!-- Left Hero Column -->
+          <div class="lg:col-span-7">
+            <p id="hero-chant" class="font-telugu text-sm sm:text-base font-bold text-saffron-700 tracking-wide flex items-center gap-2">
+              <span>🔱</span> ॥ ఓం శ్రీ దుర్గాయై నమః ॥
+            </p>
+            <h1 id="hero-title" class="mt-3 font-display text-4xl sm:text-6xl lg:text-[4rem] font-bold leading-[1.05] text-ink-900">
+              Karimnagar Durga <span class="block text-saffron-600">Idol Finder</span>
+            </h1>
+            <p id="hero-subtitle" class="mt-3 font-display text-lg sm:text-2xl text-amber-800 font-semibold">
+              Find <span class="text-saffron-500">•</span> Visit <span class="text-saffron-500">•</span> Celebrate
+            </p>
+            <p id="hero-desc" class="mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-ink-600">
+              Find all sacred Durga Devi pandals, Navratri mandapams, and Bathukamma celebrations across Karimnagar. Explore divine idols, view photos, get directions and be part of the celebration.
+            </p>
+
+            <!-- Search Form with Geolocation -->
+            <div class="mt-8 max-w-xl">
+              <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+                <form id="main-search-form" class="flex flex-1 items-center gap-2 rounded-full border border-cream-300 bg-white p-1.5 pl-4 shadow-card">
+                  <svg class="h-5 w-5 text-ink-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                  <input id="main-search-input" type="search" placeholder="Search Durga mandapam, area (e.g. Tower Circle, Mukarampura)..." class="w-full bg-transparent py-2 text-sm text-ink-800 outline-none placeholder:text-ink-500" />
+                  <button type="submit" class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-saffron-500 text-white shadow-glow hover:bg-saffron-600 transition">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                  </button>
+                </form>
+                <button id="btn-use-location" type="button" onclick="handleUseMyLocation()" class="btn-soft shrink-0 !py-3 text-xs sm:text-sm">
+                  <svg class="h-4 w-4 text-saffron-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  Use My Location
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Action Cards Grid -->
+            <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-xl">
+              <a href="#map-section" class="group rounded-2xl border border-cream-300 bg-white/90 p-3.5 shadow-soft backdrop-blur transition-all hover:-translate-y-1 hover:border-saffron-400 hover:bg-white">
+                <svg class="h-5 w-5 text-saffron-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                <span class="mt-2.5 block text-xs sm:text-[13px] font-bold text-ink-900">Explore Map</span>
+                <span class="mt-0.5 block text-[11px] text-ink-500">All Locations</span>
+              </a>
+
+              <a href="#must-visit-section" class="group rounded-2xl border border-cream-300 bg-white/90 p-3.5 shadow-soft backdrop-blur transition-all hover:-translate-y-1 hover:border-saffron-400 hover:bg-white">
+                <svg class="h-5 w-5 text-saffron-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                <span class="mt-2.5 block text-xs sm:text-[13px] font-bold text-ink-900">Must Visit</span>
+                <span class="mt-0.5 block text-[11px] text-ink-500">Top Pandals</span>
+              </a>
+
+              <a href="#moments-section" class="group rounded-2xl border border-cream-300 bg-white/90 p-3.5 shadow-soft backdrop-blur transition-all hover:-translate-y-1 hover:border-saffron-400 hover:bg-white">
+                <svg class="h-5 w-5 text-saffron-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <span class="mt-2.5 block text-xs sm:text-[13px] font-bold text-ink-900">Photo Gallery</span>
+                <span class="mt-0.5 block text-[11px] text-ink-500">Sacred Photos</span>
+              </a>
+
+              <a href="#directory-section" class="group rounded-2xl border border-cream-300 bg-white/90 p-3.5 shadow-soft backdrop-blur transition-all hover:-translate-y-1 hover:border-saffron-400 hover:bg-white">
+                <svg class="h-5 w-5 text-saffron-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                <span class="mt-2.5 block text-xs sm:text-[13px] font-bold text-ink-900">Directory</span>
+                <span class="mt-0.5 block text-[11px] text-ink-500">All Pandals</span>
+              </a>
+            </div>
+
+          </div>
+
+          <!-- Right Hero Column (Portrait Durga Image Perfectly Fitted in Clean Frame with NO Text On Image) -->
+          <div class="lg:col-span-5 relative flex justify-center items-center">
+            <div class="relative w-full max-w-[360px] sm:max-w-[400px] lg:max-w-[420px] p-2.5 sm:p-3 bg-white/90 rounded-3xl shadow-2xl border-2 border-cream-300 ring-4 ring-saffron-500/15 backdrop-blur-sm transition-transform duration-500 hover:shadow-glow">
+              
+              <!-- Clean Image Container (Properly Fitted, Aspect 4:5, No Text On Image) -->
+              <div class="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-cream-100 shadow-inner">
+                <img id="hero-image-tag" src="assets/images/hero-durga.jpg" alt="Maa Durga Karimnagar" class="w-full h-full object-cover object-center rounded-2xl transition-transform duration-700 hover:scale-[1.03]" />
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- STATS BAR -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 -mt-10 sm:-mt-12">
+        <div class="glass-card rounded-3xl p-6 shadow-card flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6">
+          
+          <dl class="grid grid-cols-2 sm:grid-cols-4 gap-6 flex-1">
+            <div class="flex items-center gap-3">
+              <div class="h-12 w-12 rounded-2xl bg-saffron-100 text-saffron-600 grid place-items-center text-xl shadow-soft">📍</div>
+              <div>
+                <dd id="stat-locations-count" class="font-display text-2xl font-bold text-ink-900">95</dd>
+                <dt class="text-xs font-medium text-ink-600">Durga Locations</dt>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="h-12 w-12 rounded-2xl bg-saffron-100 text-saffron-600 grid place-items-center text-xl shadow-soft">✨</div>
+              <div>
+                <dd id="stat-themes-count" class="font-display text-2xl font-bold text-ink-900">84</dd>
+                <dt class="text-xs font-medium text-ink-600">Special Pandals</dt>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="h-12 w-12 rounded-2xl bg-saffron-100 text-saffron-600 grid place-items-center text-xl shadow-soft">📸</div>
+              <div>
+                <dd id="stat-photos-count" class="font-display text-2xl font-bold text-ink-900">280</dd>
+                <dt class="text-xs font-medium text-ink-600">Photos & Reels</dt>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="h-12 w-12 rounded-2xl bg-saffron-100 text-saffron-600 grid place-items-center text-xl shadow-soft">🏡</div>
+              <div>
+                <dd id="stat-home-label" class="font-display text-2xl font-bold text-ink-900">Karimnagar</dd>
+                <dt class="text-xs font-medium text-ink-600">Our Sacred City</dt>
+              </div>
+            </div>
+          </dl>
+
+          <div class="hidden lg:flex items-center gap-4 border-l border-cream-300 pl-6 max-w-xs">
+            <span class="text-3xl text-saffron-500">🔱</span>
+            <div>
+              <p id="stat-quote-text" class="font-script text-xl leading-tight text-ink-800 font-bold">“సకల శుభ ప్రదాయినీ శ్రీ దుర్గాదేవి”</p>
+              <p class="text-[11px] text-saffron-600 font-telugu font-semibold">॥ శ్రీ మాత్రే నమః ॥</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- INTERACTIVE MAP SECTION -->
+      <section id="map-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 sm:mt-24">
+        <div class="grid lg:grid-cols-12 gap-8 items-center">
+          
+          <div class="lg:col-span-4">
+            <p class="eyebrow">Interactive Navratri Map</p>
+            <h2 class="section-title">Durga Pandals & Mandapams <span class="block text-saffron-600">in Karimnagar</span></h2>
+            <p class="mt-4 text-sm leading-relaxed text-ink-600">
+              Find every verified Durga Mata pandal and Navratri mandapam across Karimnagar. View live photos, darshan updates, and get turn-by-turn driving directions in Google Maps.
+            </p>
+
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href="#directory-section" class="btn-primary text-xs sm:text-sm">
+                <span>View Full Directory</span>
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </a>
+              <button type="button" onclick="handleUseMyLocation()" class="btn-outline text-xs sm:text-sm">
+                <span>📍 Find Near Me</span>
+              </button>
+            </div>
+
+            <div class="mt-6 flex items-center gap-4 text-xs text-ink-500">
+              <span class="flex items-center gap-1.5 font-semibold text-ink-700">
+                <span class="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                95+ Pandals Geocoded
+              </span>
+              <span>•</span>
+              <span>GPS Enabled</span>
+            </div>
+          </div>
+
+          <div class="lg:col-span-8">
+            <div class="rounded-3xl border border-cream-300 bg-white p-2 shadow-card overflow-hidden">
+              <div id="leaflet-map-container" class="w-full h-[380px] sm:h-[440px] rounded-2xl z-10"></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- MUST VISIT PLACES (AUTO-SCROLLING CAROUSEL) -->
+      <section id="must-visit-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 sm:mt-24">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <p class="eyebrow">Must Visit</p>
+              <span id="must-visit-count" class="chip bg-saffron-100 text-saffron-800 font-bold text-xs">
+                Priority Pandals
+              </span>
+            </div>
+            <h2 class="section-title">Must Visit Durga Pandals</h2>
+            <p class="mt-2 text-sm text-ink-600 max-w-xl">
+              The top priority Durga mandapams & magnificent pandals you shouldn't miss this Navratri season across Karimnagar.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button id="btn-toggle-autoscroll" onclick="toggleAutoScroll()" class="flex items-center gap-1.5 rounded-full border border-cream-300 bg-white px-3 py-1.5 text-xs font-semibold text-ink-700 shadow-soft hover:border-saffron-300 transition">
+              <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Auto-Scroll</span>
+            </button>
+            <button onclick="scrollRail('left')" class="h-9 w-9 rounded-full bg-white border border-cream-300 shadow-soft grid place-items-center text-ink-800 hover:bg-saffron-50 transition">
+              ‹
+            </button>
+            <button onclick="scrollRail('right')" class="h-9 w-9 rounded-full bg-white border border-cream-300 shadow-soft grid place-items-center text-ink-800 hover:bg-saffron-50 transition">
+              ›
+            </button>
+          </div>
+        </div>
+
+        <!-- Carousel Rail -->
+        <div id="must-visit-rail" class="custom-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pt-6 scroll-smooth">
+          <!-- Populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- NAVRATRI PHOTO GALLERY & DOWNLOAD CENTER -->
+      <section id="moments-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 sm:mt-24">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <p class="eyebrow">Navratri Photo Gallery</p>
+              <span id="gallery-photo-count" class="chip bg-saffron-100 text-saffron-800 font-bold text-xs">
+                Photos & Downloads
+              </span>
+            </div>
+            <h2 class="section-title">Moments from Across Karimnagar</h2>
+            <p class="mt-2 text-sm text-ink-600 max-w-xl">
+              Explore divine photos from across Karimnagar pandals. Like your favorite idols and download high-resolution photos directly to your device!
+            </p>
+          </div>
+
+          <!-- Gallery Filter & Actions -->
+          <div class="flex flex-wrap items-center gap-2.5">
+            <button id="gallery-filter-all" onclick="filterGalleryPhotos('all')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-saffron-500 text-white shadow-soft transition">
+              All Photos
+            </button>
+            <button id="gallery-filter-liked" onclick="filterGalleryPhotos('liked')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-white border border-cream-300 text-ink-700 hover:bg-cream-100 transition flex items-center gap-1">
+              <span>❤️</span> Most Liked
+            </button>
+            <button onclick="openAddGaneshModal()" class="btn-outline text-xs !py-1.5 !px-4">
+              📸 Upload Pandal Photos
+            </button>
+          </div>
+        </div>
+
+        <!-- Horizontal Scrollable Feature Rail -->
+        <div id="moments-rail" class="custom-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pt-6 scroll-smooth">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Expanded Gallery Grid -->
+        <div id="moments-grid" class="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <!-- Populated by JavaScript with Like & Download on each card -->
+        </div>
+      </section>
+
+      <!-- BROWSE BY AREA (KARIMNAGAR) -->
+      <section id="areas-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 sm:mt-24">
+        <div>
+          <p class="eyebrow">Karimnagar Colonies & Zones</p>
+          <h2 class="section-title">Browse by Area</h2>
+          <p class="mt-2 text-sm text-ink-600 max-w-xl">
+            Jump straight to any Karimnagar colony or neighbourhood to explore nearby pandals.
+          </p>
+        </div>
+
+        <div id="area-pills-container" class="mt-6 flex flex-wrap gap-2.5">
+          <!-- Populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- ALL DURGA MANDAPAMS DIRECTORY -->
+      <section id="directory-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 sm:mt-24 mb-20">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <p class="eyebrow">Live Directory</p>
+              <span id="directory-count" class="chip bg-saffron-100 text-saffron-800 font-bold text-xs">
+                95 Pandals
+              </span>
+            </div>
+            <h2 class="section-title">All Durga Pandals Directory</h2>
+            <p class="mt-2 text-sm text-ink-600 max-w-xl">
+              Search by pandal name, colony, landmark or filter by category and priority.
+            </p>
+          </div>
+
+          <!-- Category Filter Tabs -->
+          <div class="flex flex-wrap gap-2">
+            <button class="category-btn active rounded-full px-3.5 py-1.5 text-xs font-semibold bg-saffron-500 text-white shadow-soft" onclick="filterByCategory('all')">All</button>
+            <button class="category-btn rounded-full px-3.5 py-1.5 text-xs font-semibold bg-white border border-cream-300 text-ink-700 hover:bg-cream-100" onclick="filterByCategory('famous')">Famous</button>
+            <button class="category-btn rounded-full px-3.5 py-1.5 text-xs font-semibold bg-white border border-cream-300 text-ink-700 hover:bg-cream-100" onclick="filterByCategory('unique')">Unique</button>
+            <button class="category-btn rounded-full px-3.5 py-1.5 text-xs font-semibold bg-white border border-cream-300 text-ink-700 hover:bg-cream-100" onclick="filterByCategory('traditional')">Traditional</button>
+            <button class="category-btn rounded-full px-3.5 py-1.5 text-xs font-semibold bg-white border border-cream-300 text-ink-700 hover:bg-cream-100" onclick="filterByCategory('eco-friendly')">Eco-Friendly</button>
+          </div>
+        </div>
+
+        <!-- Directory Grid Container -->
+        <div id="mandapams-grid" class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <!-- Populated by JavaScript -->
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- FOOTER MATCHING REFERENCE WEBSITE -->
+    <footer class="mt-16 sm:mt-20">
+      <div class="border-t border-cream-300 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col items-center text-center gap-6 lg:flex-row lg:justify-between lg:text-left">
+          
+          <!-- Footer Logo -->
+          <a class="shrink-0 flex items-center gap-3" href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <img src="assets/images/logo.jpg" alt="Karimnagar Durga" class="h-12 w-12 rounded-full object-cover shadow-soft ring-2 ring-saffron-400" />
+            <div class="text-left">
+              <span class="font-display font-black text-lg text-ink-900 block leading-tight site-logo-text">Karimnagar Durga</span>
+              <span class="text-[10px] text-saffron-600 font-bold uppercase tracking-wider block">Idol Finder • Navratri</span>
+            </div>
+          </a>
+
+          <!-- Footer Nav Links -->
+          <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-600">
+            <a class="hover:text-saffron-600 transition-colors" href="index.html">Home</a>
+            <a class="hover:text-saffron-600 transition-colors" href="map.html">Explore Map</a>
+            <a class="hover:text-saffron-600 transition-colors" href="unique.html">Unique Durga</a>
+            <a class="hover:text-saffron-600 transition-colors" href="gallery.html">Gallery</a>
+            <a class="hover:text-saffron-600 transition-colors" href="about.html">About & FAQ</a>
+            <a class="hover:text-saffron-600 transition-colors font-medium text-saffron-700" href="submit.html">+ Add Durga</a>
+          </nav>
+
+          <!-- Developer & Instagram ID -->
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-ink-600">Developer:</span>
+            <a href="https://instagram.com/chintuvarun_3008" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 rounded-full border border-saffron-200 bg-saffron-50 px-3.5 py-1 text-xs font-semibold text-saffron-700 shadow-xs hover:border-saffron-400 hover:bg-saffron-100 transition-all">
+              <span>📸</span>
+              <span id="footer-developers" class="font-bold">@chintuvarun_3008</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom Copyright Bar -->
+      <div class="border-t border-cream-300 bg-cream-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-3 py-4 pb-24 sm:pb-4 text-center text-[11px] text-ink-600 sm:flex-row sm:justify-between sm:text-left">
+          <p id="footer-copyright">Karimnagar Durga Idol Finder © 2026 &nbsp;|&nbsp; Celebrate Culture &nbsp;|&nbsp; Support Local &nbsp;|&nbsp; Keep Karimnagar Beautiful</p>
+          <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            <span class="font-medium text-saffron-800">🔱 శ్రీ కరీంనగర్ దుర్గా నవరాత్రోత్సవాలు</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="fixed inset-x-0 bottom-0 z-[1200] border-t border-cream-300 bg-white/95 backdrop-blur sm:hidden">
+      <div class="grid grid-cols-5 items-center px-2 py-1 text-[10px] font-medium text-center">
+        <a href="#hero-section" class="py-1 text-saffron-600 flex flex-col items-center">
+          <span class="text-base">🏠</span>
+          <span>Home</span>
+        </a>
+        <a href="#map-section" class="py-1 text-ink-600 flex flex-col items-center">
+          <span class="text-base">🗺️</span>
+          <span>Map</span>
+        </a>
+        <div class="flex justify-center -mt-5">
+          <button onclick="openAddGaneshModal()" class="h-12 w-12 rounded-full bg-saffron-500 text-white shadow-lift flex items-center justify-center text-xl font-bold ring-4 ring-white">
+            +
+          </button>
+        </div>
+        <a href="#moments-section" class="py-1 text-ink-600 flex flex-col items-center">
+          <span class="text-base">📸</span>
+          <span>Gallery</span>
+        </a>
+        <a href="#directory-section" class="py-1 text-ink-600 flex flex-col items-center">
+          <span class="text-base">📋</span>
+          <span>Directory</span>
+        </a>
+      </div>
+    </nav>
+
+  </div>
+
+  <!-- MANDAPAM DETAIL MODAL -->
+  <div id="mandapam-detail-modal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-4 bg-ink-900/60 backdrop-blur-sm overflow-y-auto">
+    <div id="mandapam-modal-content" class="w-full max-w-2xl my-8">
+      <!-- Injected by JavaScript -->
+    </div>
+  </div>
+
+  <!-- ADD DURGA MANDAPAM COMMUNITY SUBMISSION MODAL -->
+  <div id="add-ganesh-modal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-4 bg-ink-900/60 backdrop-blur-sm overflow-y-auto">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-card border border-cream-300 relative my-8">
+      <button onclick="closeAddGaneshModal()" class="absolute right-4 top-4 text-ink-500 hover:text-ink-900 text-xl font-bold">✕</button>
+      
+      <div class="flex items-center gap-3 mb-4">
+        <img src="assets/images/logo.jpg" alt="Logo" class="h-10 w-10 rounded-full object-cover shadow-soft ring-2 ring-saffron-400" />
+        <div>
+          <h3 class="font-display text-xl font-bold text-ink-900">Add Durga Mandapam</h3>
+          <p class="text-xs text-ink-500">Submit your Navratri pandal for verified listing</p>
+        </div>
+      </div>
+
+      <form id="add-ganesh-form" onsubmit="handleAddGaneshSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-ink-700 mb-1">Durga Mandapam / Samithi Name *</label>
+          <input id="submit-name" required type="text" placeholder="e.g. Tower Circle Sri Kanaka Durga Samithi" class="w-full rounded-xl border border-cream-300 p-2.5 text-xs text-ink-900 outline-none focus:border-saffron-500" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-ink-700 mb-1">Telugu Name (Optional)</label>
+          <input id="submit-telugu" type="text" placeholder="e.g. శ్రీ కనకదుర్గా దేవి నవరాత్రి మండపం" class="w-full rounded-xl border border-cream-300 p-2.5 text-xs text-ink-900 outline-none focus:border-saffron-500 font-telugu" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-ink-700 mb-1">Area in Karimnagar *</label>
+            <input id="submit-area" required type="text" placeholder="e.g. Mukarampura" class="w-full rounded-xl border border-cream-300 p-2.5 text-xs text-ink-900 outline-none focus:border-saffron-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-ink-700 mb-1">Category</label>
+            <select id="submit-category" class="w-full rounded-xl border border-cream-300 p-2.5 text-xs text-ink-900 outline-none focus:border-saffron-500">
+              <option value="famous">Famous Grand Pandal</option>
+              <option value="traditional">Traditional Rituals</option>
+              <option value="unique">Special Themes</option>
+              <option value="eco-friendly">Eco-Friendly Clay</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-ink-700 mb-1">Address & Nearby Landmark *</label>
+          <input id="submit-address" required type="text" placeholder="e.g. Near Clock Tower, Main Road" class="w-full rounded-xl border border-cream-300 p-2.5 text-xs text-ink-900 outline-none focus:border-saffron-500" />
+        </div>
+
+        <!-- Photo Upload (Upload at least 2 photos for Admin Approval) -->
+        <div class="p-4 rounded-2xl bg-cream-50 border border-saffron-300 space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-bold text-ink-700">Durga Photos (Min 2 Photos Required for Approval) *</label>
+            <span class="text-[10px] text-saffron-800 font-bold bg-saffron-100 px-2 py-0.5 rounded-md">Browse from Device</span>
+          </div>
+
+          <!-- Photo 1: Main Idol Photo (Required) -->
+          <div class="flex items-center gap-3 p-2 bg-white rounded-xl border border-saffron-200">
+            <label class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-dashed border-saffron-500 bg-saffron-50/70 text-saffron-800 text-xs font-bold cursor-pointer hover:bg-saffron-100 transition shrink-0">
+              <span>📷</span> Photo 1 (Main Idol) *
+              <input id="submit-photo-file-1" type="file" accept="image/*" onchange="handleSubmitPhotoBrowse(event, 1)" class="hidden" />
+            </label>
+            <img id="submit-photo-preview-1" src="" alt="Photo 1 preview" class="h-10 w-12 rounded-lg object-cover border border-cream-300 shadow-soft hidden" />
+            <input id="submit-photo-1" type="hidden" />
+            <span id="submit-photo-hint-1" class="text-[11px] text-ink-500 truncate">Front clear view of Durga Mata idol</span>
+          </div>
+
+          <!-- Photo 2: Pandal & Decoration (Required) -->
+          <div class="flex items-center gap-3 p-2 bg-white rounded-xl border border-saffron-200">
+            <label class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-dashed border-saffron-500 bg-saffron-50/70 text-saffron-800 text-xs font-bold cursor-pointer hover:bg-saffron-100 transition shrink-0">
+              <span>📷</span> Photo 2 (Pandal View) *
+              <input id="submit-photo-file-2" type="file" accept="image/*" onchange="handleSubmitPhotoBrowse(event, 2)" class="hidden" />
+            </label>
+            <img id="submit-photo-preview-2" src="" alt="Photo 2 preview" class="h-10 w-12 rounded-lg object-cover border border-cream-300 shadow-soft hidden" />
+            <input id="submit-photo-2" type="hidden" />
+            <span id="submit-photo-hint-2" class="text-[11px] text-ink-500 truncate">Pandal, stage, or lighting view</span>
+          </div>
+
+          <!-- Photo 3: Aarti & Special Puja (Optional) -->
+          <div class="flex items-center gap-3 p-2 bg-white rounded-xl border border-cream-300">
+            <label class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-dashed border-cream-400 bg-cream-50 text-ink-700 text-xs font-bold cursor-pointer hover:bg-cream-100 transition shrink-0">
+              <span>📷</span> Photo 3 (Optional)
+              <input id="submit-photo-file-3" type="file" accept="image/*" onchange="handleSubmitPhotoBrowse(event, 3)" class="hidden" />
+            </label>
+            <img id="submit-photo-preview-3" src="" alt="Photo 3 preview" class="h-10 w-12 rounded-lg object-cover border border-cream-300 shadow-soft hidden" />
+            <input id="submit-photo-3" type="hidden" />
+            <span id="submit-photo-hint-3" class="text-[11px] text-ink-500 truncate">Special puja, aarti, or decorations</span>
+          </div>
+
+          <p class="text-[11px] text-saffron-800 bg-saffron-50 p-2 rounded-lg border border-saffron-200">
+            🔱 <strong>Admin Approval Policy:</strong> Once at least 2 photos are uploaded, your mandapam will be submitted for Admin Review and published immediately after verification.
+          </p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-ink-700 mb-1">Instagram Handle (Optional)</label>
+          <input id="submit-instagram" type="text" placeholder="@karimnagar_durga_committee" class="w-full rounded-xl border border-cream-300 p-2.5 text-xs text-ink-900 outline-none focus:border-saffron-500" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-ink-700 mb-1">Description / Special Highlights</label>
+          <textarea id="submit-desc" rows="2" placeholder="Describe special pujas, Chandi Homam timings, Bathukamma..." class="w-full rounded-xl border border-cream-300 p-2.5 text-xs text-ink-900 outline-none focus:border-saffron-500"></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary w-full !py-3">
+          Submit Durga Mandapam
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FULL PHOTO LIGHTBOX WITH LIKE & DOWNLOAD -->
+  <div id="photo-lightbox-modal" class="fixed inset-0 z-[2500] hidden items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+    <div class="relative max-w-4xl w-full bg-ink-900 rounded-3xl overflow-hidden border border-amber-500/30 shadow-2xl flex flex-col my-auto">
+      
+      <!-- Top Bar -->
+      <div class="flex items-center justify-between p-4 bg-black/50 border-b border-white/10 text-white">
+        <div class="flex items-center gap-3">
+          <img src="assets/images/logo.jpg" alt="Logo" class="h-8 w-8 rounded-full object-cover ring-1 ring-amber-400" />
+          <div>
+            <h4 id="lightbox-title" class="font-display font-bold text-sm sm:text-base text-amber-200">Durga Pandal Photo</h4>
+            <p id="lightbox-area" class="text-[11px] text-cream-300">Karimnagar</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Lightbox Download Button -->
+          <button id="lightbox-download-btn" onclick="handleLightboxDownload()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-saffron-500 hover:bg-saffron-600 text-white text-xs font-bold shadow-soft transition">
+            <span>⬇️</span> <span>Download HD</span>
+          </button>
+
+          <!-- Lightbox Close Button -->
+          <button onclick="closePhotoLightbox()" class="h-8 w-8 rounded-full bg-white/10 hover:bg-white/25 text-white grid place-items-center text-sm font-bold transition">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Photo Display Area -->
+      <div class="relative flex items-center justify-center bg-black/80 p-2 sm:p-4 min-h-[300px] max-h-[70vh] overflow-hidden">
+        <img id="lightbox-img" src="" alt="Durga Full View" class="max-h-[65vh] max-w-full object-contain rounded-xl shadow-2xl transition-transform duration-300" />
+        
+        <!-- Prev & Next Arrow Controls -->
+        <button onclick="navigateLightbox(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-black/60 hover:bg-saffron-600 text-white grid place-items-center text-xl transition shadow-lg border border-white/20">
+          ‹
+        </button>
+        <button onclick="navigateLightbox(1)" class="absolute right-3 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-black/60 hover:bg-saffron-600 text-white grid place-items-center text-xl transition shadow-lg border border-white/20">
+          ›
+        </button>
+      </div>
+
+      <!-- Bottom Bar with Likes & Share -->
+      <div class="p-4 bg-black/60 border-t border-white/10 text-white flex flex-wrap items-center justify-between gap-3 text-xs">
+        <p id="lightbox-caption" class="text-cream-200 italic max-w-md"></p>
+        
+        <div class="flex items-center gap-3">
+          <!-- Like Button in Lightbox -->
+          <button id="lightbox-like-btn" onclick="handleLightboxLike()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-rose-600/30 border border-white/20 text-white font-bold transition">
+            <span id="lightbox-like-icon">🤍</span>
+            <span id="lightbox-like-count">0</span>
+          </button>
+
+          <!-- Share Button -->
+          <button id="lightbox-share-btn" onclick="handleLightboxShare()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition">
+            <span>📲</span> Share WhatsApp
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FLOATING SCREEN: FOLLOW DEVELOPER FOR MORE UPDATES -->
+  <div id="developer-popup-modal" class="fixed inset-0 z-[3000] hidden items-center justify-center p-4 bg-ink-900/65 backdrop-blur-md">
+    <div class="relative w-full max-w-sm sm:max-w-md bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-saffron-300 transform transition-all duration-300 text-center animate-card-pop">
+      
+      <!-- Close Button -->
+      <button onclick="closeDeveloperPopup()" class="absolute right-4 top-4 h-8 w-8 rounded-full bg-cream-100 hover:bg-cream-200 text-ink-700 grid place-items-center text-sm font-bold transition" title="Close">
+        ✕
+      </button>
+
+      <!-- Badge / Icon -->
+      <div class="mx-auto w-16 h-16 rounded-full bg-gradient-to-tr from-crimson-600 via-saffron-500 to-amber-400 p-1 shadow-lift mb-3 flex items-center justify-center">
+        <img src="assets/images/logo.jpg" alt="Karimnagar Durga Finder" class="w-full h-full rounded-full object-cover border-2 border-white" />
+      </div>
+
+      <!-- Content Tag -->
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-saffron-50 text-saffron-700 text-xs font-bold border border-saffron-200 mb-2">
+        <span>🔱</span> Official Navratri Updates
+      </span>
+      
+      <h3 class="font-display text-xl sm:text-2xl font-black text-ink-900 leading-snug">
+        Follow Developer for More Updates
+      </h3>
+
+      <!-- Developer Handle Card -->
+      <a href="https://instagram.com/chintuvarun_3008" target="_blank" rel="noopener noreferrer" class="my-4 p-3 rounded-2xl bg-gradient-to-r from-rose-50 via-pink-50 to-amber-50 border border-rose-200 flex items-center justify-between hover:shadow-soft transition group block">
+        <div class="flex items-center gap-3 text-left">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 via-pink-600 to-rose-500 text-white grid place-items-center font-bold text-base shadow-soft shrink-0">
+            📸
+          </div>
+          <div>
+            <span class="block text-[11px] font-bold text-ink-500">Instagram Creator</span>
+            <span class="block text-sm font-black text-rose-600 group-hover:underline">@chintuvarun_3008</span>
+          </div>
+        </div>
+        <span class="chip bg-rose-600 text-white font-bold text-[11px] shrink-0">Follow ↗</span>
+      </a>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col gap-2">
+        <a href="https://instagram.com/chintuvarun_3008" target="_blank" rel="noopener noreferrer" onclick="closeDeveloperPopup()" class="btn-primary w-full !py-3 !bg-gradient-to-r !from-rose-600 !via-pink-600 !to-amber-500 text-white font-bold shadow-lift flex items-center justify-center gap-2">
+          <span>📸</span> Follow @chintuvarun_3008
+        </a>
+        <button onclick="closeDeveloperPopup()" class="w-full py-2 text-xs font-bold text-ink-600 hover:text-ink-900 transition">
+          Continue to Durga Idol Finder 🔱
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Leaflet + MapLibre GL (OpenFreeMap basemap) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"></script>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+
+<!-- Existing application -->
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Durga Map of Karimnagar - Pandals & GPS Directions | Karimnagar Durga Idol Finder</title>
+  <meta name="description" content="Find Durga Devi mandapams across Karimnagar. Tap markers for photos, alankarams and direct GPS turn-by-turn driving directions." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            saffron: {
+              50: '#fdf4f2',
+              100: '#fae5e0',
+              200: '#f4cdc4',
+              300: '#eaab9d',
+              400: '#d75d4f',
+              500: '#b8232e',
+              600: '#961621',
+              700: '#770e17',
+              800: '#5a0a11',
+              900: '#3f060b',
+            },
+            crimson: {
+              50: '#fdf2f4',
+              100: '#fbe4e8',
+              200: '#f7cbd2',
+              300: '#f0a3af',
+              400: '#e46b7f',
+              500: '#c51d34',
+              600: '#9e1025',
+              700: '#7e0c1c',
+              800: '#620a16',
+              900: '#46060f',
+            },
+            gold: {
+              50: '#fffef0',
+              100: '#fefbd8',
+              200: '#fef5b0',
+              300: '#fdec7d',
+              400: '#eac840',
+              500: '#d4af37',
+              600: '#b38c22',
+              700: '#8c6b16',
+              800: '#664c0f',
+              900: '#433107',
+            },
+            cream: {
+              50: '#fcfaf7',
+              100: '#f7f3ec',
+              200: '#ede5d8',
+              300: '#dfd2be',
+              400: '#cbb89e',
+            },
+            ink: {
+              500: '#8a787c',
+              600: '#655257',
+              700: '#443539',
+              800: '#281d20',
+              900: '#140b0d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Leaflet Maps CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-cream-50 text-ink-900 flex flex-col min-h-screen">
+
+  <!-- Top Sacred Bar -->
+  <div class="bg-gradient-to-r from-crimson-700 via-saffron-600 to-amber-600 py-1.5 px-4 text-center text-xs font-semibold text-white tracking-wider flex items-center justify-between">
+    <span class="hidden sm:inline-block">🔱 ॥ ఓం శ్రీ దుర్గాయై నమః ॥</span>
+    <span class="mx-auto font-medium">శ్రీ కరీంనగర్ దుర్గా నవరాత్రి ఉత్సవాలు • Interactive GPS Map</span>
+    <span class="hidden sm:inline-block">॥ జై దుర్గా భవానీ ॥ 🔱</span>
+  </div>
+
+  <!-- Header / Navbar -->
+  <header class="sticky top-0 z-[1000] bg-white/95 backdrop-blur-md border-b border-cream-300 shadow-soft">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      
+      <!-- Logo -->
+      <a href="index.html" class="flex items-center gap-3 group">
+        <img src="assets/images/logo.jpg" alt="Karimnagar Durga Idol Finder Logo" class="w-12 h-12 rounded-full object-cover shadow-soft ring-2 ring-saffron-500/40 group-hover:scale-105 transition-transform" />
+        <div>
+          <span class="font-display font-black text-lg sm:text-xl text-ink-900 tracking-tight block leading-none site-logo-text">Karimnagar Durga</span>
+          <span class="text-[10px] uppercase font-bold tracking-widest text-saffron-600 block mt-0.5">Idol Finder • Navratri</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium">
+        <a href="index.html" class="text-ink-700 hover:text-saffron-600 transition-colors">Home</a>
+        <a href="map.html" class="text-saffron-600 font-bold border-b-2 border-saffron-500 pb-1">Explore Map</a>
+        <a href="unique.html" class="text-ink-700 hover:text-saffron-600 transition-colors">Unique Durga</a>
+        <a href="gallery.html" class="text-ink-700 hover:text-saffron-600 transition-colors">Gallery</a>
+        <a href="about.html" class="text-ink-700 hover:text-saffron-600 transition-colors">About</a>
+      </nav>
+
+      <!-- Right Action Button -->
+      <div class="flex items-center gap-3">
+        <a href="submit.html" class="btn-primary text-xs sm:text-sm !py-2.5 !px-5 flex items-center gap-1.5 shadow-md">
+          <span>🔱</span>
+          <span>+ Add Durga</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAP MAIN CONTENT -->
+  <main class="flex-1 flex flex-col">
+    
+    <!-- Top Filter & Search Bar -->
+    <div class="bg-white border-b border-cream-300 py-4 px-4 sm:px-6 lg:px-8 shadow-sm">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+        
+        <!-- Search input -->
+        <div class="flex-1 max-w-md">
+          <div class="flex items-center gap-2 rounded-full border border-cream-300 bg-cream-50/80 px-3.5 py-1.5 focus-within:border-saffron-500 focus-within:bg-white transition shadow-sm">
+            <svg class="h-4 w-4 text-ink-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input id="map-search-input" type="search" placeholder="Search pandal, colony, landmark..." class="w-full bg-transparent text-xs text-ink-900 outline-none placeholder:text-ink-500" oninput="handleMapSearch(this.value)" />
+          </div>
+        </div>
+
+        <!-- Location & Status Controls -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button id="map-btn-location" onclick="handleMapUseLocation()" class="btn-soft text-xs !py-2 !px-3.5 flex items-center gap-1.5">
+            <span>📍</span> <span>Use My Location</span>
+          </button>
+          <span id="map-counter-badge" class="chip bg-saffron-50 text-saffron-800 font-bold text-xs border border-saffron-200">
+            18 Pandals on Map
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Area Pills Row -->
+      <div id="map-area-pills" class="max-w-7xl mx-auto mt-3 flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar text-xs">
+        <!-- Injected by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Map & Sidebar Split Layout -->
+    <div class="flex-1 flex flex-col lg:flex-row relative min-h-[550px] lg:min-h-[calc(100vh-170px)]">
+      
+      <!-- Left: Pandals Sidebar List -->
+      <div class="w-full lg:w-[420px] shrink-0 bg-white border-r border-cream-300 flex flex-col h-[350px] lg:h-auto overflow-y-auto custom-scrollbar shadow-sm">
+        <div class="p-3.5 bg-cream-100/60 border-b border-cream-200 flex items-center justify-between text-xs font-bold text-ink-700">
+          <span>Karimnagar Pandals List</span>
+          <span id="map-list-count" class="text-saffron-700">18 Available</span>
+        </div>
+        
+        <div id="map-pandals-list" class="divide-y divide-cream-200 flex-1">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+
+      <!-- Right: Interactive Leaflet Map -->
+      <div class="flex-1 relative w-full h-[450px] lg:h-auto min-h-[400px]">
+        <div id="dedicated-leaflet-map" class="w-full h-full"></div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto">
+    <div class="border-t border-cream-300 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col items-center text-center gap-6 lg:flex-row lg:justify-between lg:text-left">
+        
+        <!-- Footer Logo -->
+        <a class="shrink-0 flex items-center gap-3" href="index.html">
+          <img src="assets/images/logo.jpg" alt="Karimnagar Durga" class="h-12 w-12 rounded-full object-cover shadow-soft ring-2 ring-saffron-400" />
+          <div class="text-left">
+            <span class="font-display font-black text-lg text-ink-900 block leading-tight site-logo-text">Karimnagar Durga</span>
+            <span class="text-[10px] text-saffron-600 font-bold uppercase tracking-wider block">Idol Finder • Navratri</span>
+          </div>
+        </a>
+
+        <!-- Footer Nav Links -->
+        <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-600">
+          <a class="hover:text-saffron-600 transition-colors" href="index.html">Home</a>
+          <a class="hover:text-saffron-600 transition-colors font-bold text-saffron-600" href="map.html">Explore Map</a>
+          <a class="hover:text-saffron-600 transition-colors" href="unique.html">Unique Durga</a>
+          <a class="hover:text-saffron-600 transition-colors" href="gallery.html">Gallery</a>
+          <a class="hover:text-saffron-600 transition-colors" href="about.html">About</a>
+          <a class="hover:text-saffron-600 transition-colors font-medium text-saffron-700" href="submit.html">Add Durga</a>
+        </nav>
+
+        <!-- Developer & Instagram ID -->
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-ink-600">Developer:</span>
+          <a href="https://instagram.com/chintuvarun_3008" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1.5 rounded-full border border-saffron-200 bg-saffron-50 px-3.5 py-1 text-xs font-semibold text-saffron-700 shadow-xs hover:border-saffron-400 hover:bg-saffron-100 transition-all">
+            <span>📸</span>
+            <span id="footer-developers" class="font-bold">@chintuvarun_3008</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom Copyright Bar -->
+    <div class="border-t border-cream-300 bg-cream-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-3 py-4 pb-24 sm:pb-4 text-center text-[11px] text-ink-600 sm:flex-row sm:justify-between sm:text-left">
+        <p>Karimnagar Durga Idol Finder © 2026 &nbsp;|&nbsp; Celebrate Culture &nbsp;|&nbsp; Support Local &nbsp;|&nbsp; Keep Karimnagar Beautiful</p>
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <span class="font-medium text-saffron-800">🔱 శ్రీ కరీంనగర్ దుర్గా నవరాత్రోత్సవాలు</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MOBILE BOTTOM NAVIGATION -->
+  <nav class="fixed inset-x-0 bottom-0 z-[1200] border-t border-cream-300 bg-white/95 backdrop-blur sm:hidden">
+    <div class="grid grid-cols-5 items-center px-2 py-1 text-[10px] font-medium text-center">
+      <a href="index.html" class="py-1 text-ink-600 flex flex-col items-center">
+        <span class="text-base">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="map.html" class="py-1 text-saffron-600 font-bold flex flex-col items-center">
+        <span class="text-base">🗺️</span>
+        <span>Map</span>
+      </a>
+      <div class="flex justify-center -mt-5">
+        <a href="submit.html" class="h-12 w-12 rounded-full bg-saffron-500 text-white shadow-lift flex items-center justify-center text-xl font-bold ring-4 ring-white">
+          +
+        </a>
+      </div>
+      <a href="gallery.html" class="py-1 text-ink-600 flex flex-col items-center">
+        <span class="text-base">📸</span>
+        <span>Gallery</span>
+      </a>
+      <a href="about.html" class="py-1 text-ink-600 flex flex-col items-center">
+        <span class="text-base">ℹ️</span>
+        <span>About</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- MANDAPAM DETAIL MODAL -->
+  <div id="mandapam-detail-modal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-4 bg-ink-900/60 backdrop-blur-sm overflow-y-auto">
+    <div id="mandapam-modal-content" class="w-full max-w-2xl my-8">
+      <!-- Injected by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/leaflet-maplibre-gl.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let dedicatedMap = null;
+    let mapMarkerList = [];
+    let activeMapArea = 'all';
+    let mapSearchQuery = '';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initDedicatedMap();
+    });
+
+    function initDedicatedMap() {
+      const mapContainer = document.getElementById("dedicated-leaflet-map");
+      if (!mapContainer) return;
+
+      dedicatedMap = L.map('dedicated-leaflet-map').setView([18.4386, 79.1288], 14);
+
+      if (typeof L.maplibreGL !== "function") {
+        console.error("MapLibre-GL-Leaflet failed to load.");
+        return;
+      }
+
+      L.maplibreGL({
+        style: 'https://tiles.openfreemap.org/styles/liberty',
+        interactive: false,
+        padding: 0
+      }).addTo(dedicatedMap);
+
+      dedicatedMap.attributionControl.addAttribution(
+        'OpenFreeMap © OpenMapTiles Data from OpenStreetMap'
+      );
+
+      setTimeout(() => {
+        if (dedicatedMap) dedicatedMap.invalidateSize({ pan: false });
+      }, 250);
+
+      renderMapAreaPills();
+      renderMapMarkersAndList();
+    }
+
+    function renderMapAreaPills() {
+      const container = document.getElementById("map-area-pills");
+      if (!container) return;
+      const areas = getAreasList();
+      container.innerHTML = `
+        <button onclick="filterDedicatedMapArea('all')" class="px-3 py-1 rounded-full whitespace-nowrap font-bold transition ${activeMapArea === 'all' ? 'bg-saffron-500 text-white' : 'bg-cream-100 text-ink-700 hover:bg-cream-200'}">All Areas</button>
+      ` + areas.map(a => `
+        <button onclick="filterDedicatedMapArea('${a}')" class="px-3 py-1 rounded-full whitespace-nowrap font-medium transition ${activeMapArea === a ? 'bg-saffron-500 text-white font-bold' : 'bg-cream-100 text-ink-700 hover:bg-cream-200'}">${a}</button>
+      `).join('');
+    }
+
+    function filterDedicatedMapArea(area) {
+      activeMapArea = area;
+      renderMapAreaPills();
+      renderMapMarkersAndList();
+    }
+
+    function handleMapSearch(val) {
+      mapSearchQuery = (val || '').toLowerCase().trim();
+      renderMapMarkersAndList();
+    }
+
+    function renderMapMarkersAndList() {
+      const mandapams = getMandapams();
+      const listEl = document.getElementById("map-pandals-list");
+      const countBadge = document.getElementById("map-counter-badge");
+      const listCount = document.getElementById("map-list-count");
+
+      // Clear existing markers
+      mapMarkerList.forEach(m => dedicatedMap.removeLayer(m));
+      mapMarkerList = [];
+
+      let filtered = mandapams.filter(item => {
+        if (activeMapArea !== 'all' && item.area !== activeMapArea) return false;
+        if (mapSearchQuery) {
+          const mName = (item.name || '').toLowerCase();
+          const mArea = (item.area || '').toLowerCase();
+          const mAddr = (item.address || '').toLowerCase();
+          if (!mName.includes(mapSearchQuery) && !mArea.includes(mapSearchQuery) && !mAddr.includes(mapSearchQuery)) return false;
+        }
+        return true;
+      });
+
+      if (countBadge) countBadge.textContent = `${filtered.length} Pandals on Map`;
+      if (listCount) listCount.textContent = `${filtered.length} Available`;
+
+      const customPin = L.divIcon({
+        className: 'custom-map-pin',
+        html: `<div style="background: linear-gradient(135deg, #b8232e, #770e17); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: white; box-shadow: 0 4px 14px rgba(126,12,28,0.55); border: 2.5px solid #d4af37; font-size: 15px;">🔱</div>`,
+        iconSize: [34, 34],
+        iconAnchor: [17, 17]
+      });
+
+      // Render Map Markers
+      filtered.forEach(item => {
+        if (item.latitude && item.longitude) {
+          const photo = (item.photos && item.photos.length > 0) ? item.photos[0].url : "assets/images/hero-durga.jpg";
+          const popupHtml = `
+            <div style="font-family: 'Inter', sans-serif; width: 220px;">
+              <img src="${photo}" style="width: 100%; height: 110px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;" />
+              <h4 style="font-weight: 700; font-size: 14px; margin: 0 0 4px 0; color: #140b0d;">${item.name}</h4>
+              <p style="font-size: 11px; color: #961621; margin: 0 0 6px 0; font-weight: 600;">📍 ${item.area}</p>
+              <div style="display: flex; gap: 6px;">
+                <button onclick="openMandapamModal('${item.id}')" style="background: #b8232e; color: white; border: 1px solid #d4af37; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; flex: 1;">View Details</button>
+                <a href="https://www.google.com/maps/search/?api=1&query=${item.latitude},${item.longitude}" target="_blank" style="background: #ede5d8; color: #770e17; text-decoration: none; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center;">GPS ↗</a>
+              </div>
+            </div>
+          `;
+          const marker = L.marker([item.latitude, item.longitude], { icon: customPin })
+            .addTo(dedicatedMap)
+            .bindPopup(popupHtml);
+          mapMarkerList.push(marker);
+        }
+      });
+
+      // Render Sidebar List
+      if (listEl) {
+        if (filtered.length === 0) {
+          listEl.innerHTML = `<div class="p-8 text-center text-xs text-ink-500">No mandapams match your filter.</div>`;
+          return;
+        }
+
+        listEl.innerHTML = filtered.map(item => {
+          const photo = (item.photos && item.photos.length > 0) ? item.photos[0].url : "assets/images/hero-durga.jpg";
+          return `
+            <div class="p-3.5 hover:bg-cream-50 transition cursor-pointer flex gap-3 items-center group" onclick="panToMandapam(${item.latitude}, ${item.longitude}, '${item.id}')">
+              <img src="${photo}" alt="${item.name}" class="w-16 h-16 rounded-xl object-cover border border-cream-300 shrink-0 group-hover:scale-105 transition" />
+              <div class="flex-1 min-w-0">
+                <h4 class="font-display text-xs font-bold text-ink-900 truncate group-hover:text-saffron-700">${item.name}</h4>
+                <p class="text-[11px] text-saffron-700 font-semibold mt-0.5">📍 ${item.area}</p>
+                <p class="text-[10px] text-ink-500 truncate mt-0.5">${item.address || ''}</p>
+                <div class="mt-2 flex items-center gap-2">
+                  <button onclick="openMandapamModal('${item.id}'); event.stopPropagation();" class="text-[10px] font-bold text-saffron-700 bg-saffron-50 px-2 py-0.5 rounded-md border border-saffron-200">Details</button>
+                  <a href="https://www.google.com/maps/search/?api=1&query=${item.latitude},${item.longitude}" target="_blank" onclick="event.stopPropagation();" class="text-[10px] font-bold text-ink-700 bg-cream-200 px-2 py-0.5 rounded-md">GPS ↗</a>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function panToMandapam(lat, lng, id) {
+      if (dedicatedMap && lat && lng) {
+        dedicatedMap.setView([lat, lng], 16, { animate: true });
+        const targetMarker = mapMarkerList.find(m => {
+          const p = m.getLatLng();
+          return Math.abs(p.lat - lat) < 0.0001 && Math.abs(p.lng - lng) < 0.0001;
+        });
+        if (targetMarker) targetMarker.openPopup();
+      }
+    }
+
+    function handleMapUseLocation() {
+      const btn = document.getElementById("map-btn-location");
+      if (!navigator.geolocation) return alert("Geolocation not supported.");
+      btn.innerHTML = `<span>⏳</span> Locating...`;
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          btn.innerHTML = `<span>📍</span> Location Active`;
+          if (dedicatedMap) {
+            dedicatedMap.setView([pos.coords.latitude, pos.coords.longitude], 15);
+            L.marker([pos.coords.latitude, pos.coords.longitude], {
+              icon: L.divIcon({
+                className: 'user-pin',
+                html: `<div style="background:#2563eb;width:20px;height:20px;border-radius:50%;border:3px solid white;box-shadow:0 0 10px rgba(37,99,235,0.6);"></div>`,
+                iconSize: [20, 20]
+              })
+            }).addTo(dedicatedMap).bindPopup("<b>You are here</b>").openPopup();
+          }
+        },
+        () => {
+          btn.innerHTML = `<span>📍</span> Use My Location`;
+          alert("Could not fetch location.");
+        }
+      );
+    }
+  </script>
+</body>
+</html>
